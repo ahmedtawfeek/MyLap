@@ -1,17 +1,7 @@
-FROM centos
+FROM php:7.0-apache
 
-RUN yum -y install openssh-server
+RUN apt-get update && \
+    apt-get install -y php5-mysql && \
+    apt-get clean
 
-RUN useradd remote_user && \
-    echo "13445" | passwd remote_user --stdin && \
-    mkdir /home/remote_user/.ssh && \
-    chmod 700 /home/remote_user/.ssh
-
-RUN chown remote_user:remote_user -R /home/remote_user/.ssh/ && \
-    chmod 600 /home/remote_user/.ssh/authorized_keys
-
-RUN /usr/sbin/sshd-keygen
-
-RUN yum -y install mysql
-
-CMD /usr/sbin/sshd -D
+COPY myapp /var/www/html/

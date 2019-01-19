@@ -1,8 +1,8 @@
 FROM ubuntu:latest
 
-RUN apt-get update && \
-    apt-get install apache2 && apt-get install php5 libapache2-mod-php5 && apt-get install mysql-server mysql-client
+RUN apt-get update -y && \
+    apt-get install -y apache2 && apt-get install -y php5 libapache2-mod-php5 && apt-get install -y mysql-server mysql-client
 
 COPY myapp /var/www/html/
 
-RUN service apache2 restart
+RUN sudo service apache2 restart

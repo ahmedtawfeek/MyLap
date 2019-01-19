@@ -1,7 +1,6 @@
 FROM ubuntu:latest
 
-RUN apt-get update -y && \
-    apt-get install -y apache2 && apt-get install -y php5 && apt-get install -y mysql-server mysql-client
+RUN apt-get update -y 
 
 COPY myapp /var/www/html/
 

@@ -1,0 +1,9 @@
+[Master]
+postgressM ansible_ssh_pass=1234 ansible_ssh_user=postgres
+[GOCD-M]
+192.168.0.14 ansible_ssh_pass=1234 ansible_ssh_user=go
+[gocd-S]
+192.168.0.15
+[Standby]
+postgressS ansible_ssh_pass=1234 ansible_ssh_user=postgres
+

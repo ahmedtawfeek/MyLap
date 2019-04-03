@@ -1,0 +1,45 @@
+---
+- hosts: Master
+  gather_facts: no
+  tasks:
+    - name: Stop the Postgres Deamon.
+      service:
+        name: postgresql-9.6
+        state: stopped
+      become: yes
+
+- hosts: GOCD-M
+  vars_files:
+    - var-prod.yml
+  remote_user: go
+  tasks:
+    - name: stop the GOCD server.
+      service:
+        name: go-server
+        state: stopped
+      become: yes
+
+    - name: Re-point the go-server to standby postgress node
+      replace:
+        path: /etc/go/postgresqldb.properties
+        regexp: "{{ master_db }}"
+        replace: "{{ slave_db }}"
+        backup: yes
+
+- hosts: Standby
+  remote_user: postgres 
+  gather_facts: no
+  tasks:
+    - name: promote Standby DB to Master.
+      file: 
+        dest: /var/lib/pgsql/9.6/data/postgresql.trigger.5432
+        state: touch
+
+- hosts: GOCD-M
+  remote_user: go
+  tasks:
+    - name: start the GOCD server.
+      service:
+        name: go-server
+        state: started
+      become: yes
